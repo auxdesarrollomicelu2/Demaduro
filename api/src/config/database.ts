@@ -5,7 +5,7 @@ const isDevelopment = config.nodeEnv === 'development'
 
 const dbConfig = {
   dialect: 'postgres' as const,
-  logging: isDevelopment ? console.log : false,
+  logging: false,
   timezone: '-05:00', // Hora de Colombia (UTC-5)
   dialectOptions: {
     ssl: {

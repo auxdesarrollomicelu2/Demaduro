@@ -1,6 +1,9 @@
 import express, { Application, NextFunction, Request, Response } from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import { existsSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import swaggerUi from 'swagger-ui-express'
 import { swaggerSpec } from './config/swagger.js'
 import { connectDB } from './config/database.js'
@@ -20,16 +23,6 @@ app.use(cors({
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-
-// Routes
-app.get('/', (_req: Request, res: Response) => {
-  res.json({
-    success: true,
-    message: 'Demaduro API - Backend funcionando correctamente',
-    version: '1.0.0',
-    timestamp: new Date().toISOString(),
-  })
-})
 
 // Health check endpoint
 app.get('/health', (_req: Request, res: Response) => {
@@ -61,6 +54,16 @@ app.use('/api/sedes', sedeRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/users', userRoutes)
 
+// Web (build de Vite)
+const webDist = fileURLToPath(new URL('../../dist', import.meta.url))
+
+if (existsSync(webDist)) {
+  app.use(express.static(webDist))
+  app.get(/^\/(?!api(\/|$)|api-docs(\/|$)|health$).*/, (_req: Request, res: Response) => {
+    res.sendFile(path.join(webDist, 'index.html'))
+  })
+}
+
 // Error handling middleware
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Error:', err)
@@ -85,20 +88,7 @@ async function startServer() {
   await connectDB()
   
   app.listen(PORT, () => {
-    console.log(`
-╔═══════════════════════════════════════════════════════╗
-║                                                       ║
-║   🍽️  DEMADURO API                                    ║
-║                                                       ║
-║   🚀 Servidor corriendo en:                          ║
-║   📍 http://localhost:${PORT}                        ║
-║   📚 Documentación: http://localhost:${PORT}/api-docs ║
-║                                                       ║
-║   🌍 Entorno: ${config.nodeEnv}                        ║
-║   📅 ${new Date().toLocaleString('es-CO')}            ║
-║                                                       ║
-╚═══════════════════════════════════════════════════════╝
-  `)
+    console.log(`✅ Servidor corriendo en el puerto ${PORT}`)
   })
 }
 
