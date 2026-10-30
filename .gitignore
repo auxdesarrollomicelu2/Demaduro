@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+api/node_modules/
+
+# Environment variables (un solo .env por proyecto, nunca se sube)
+.env
+.env.*
+
+# Build outputs
+dist/
+build/
+api/dist/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Testing
+coverage/
+
+# Caches
+*.tsbuildinfo
+.eslintcache
+
+# Temporary files
+*.tmp
+*.temp
