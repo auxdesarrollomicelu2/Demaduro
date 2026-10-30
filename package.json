@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm --prefix api ci --include=dev && npm --prefix api run build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "serve -s dist -l $PORT"
+    "start": "npm --prefix api start"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -19,7 +19,6 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.0.0",
-    "serve": "^14.2.6",
     "tailwind-merge": "^2.5.0"
   },
   "devDependencies": {
